@@ -69,8 +69,4 @@ class RailsJsLoggerTest < Minitest::Test
     RailsJsLogger.logger = custom_logger
     assert_equal custom_logger, RailsJsLogger.logger
   end
-
-  def test_error_class
-    assert RailsJsLogger::Error < StandardError
-  end
 end

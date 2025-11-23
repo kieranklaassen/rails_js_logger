@@ -5,6 +5,7 @@
     endpoint: "/rails_js_logger/logs",
     batchSize: 10,
     flushInterval: 5000,
+    maxQueueSize: 1000,
     queue: [],
     original: {},
 
@@ -31,6 +32,10 @@
     },
 
     enqueue: function(level, args) {
+      if (this.queue.length >= this.maxQueueSize) {
+        this.queue.shift();  // Drop oldest entry
+      }
+
       var message = args.map(function(arg) {
         if (typeof arg === "object") {
           try { return JSON.stringify(arg); } catch (e) { return String(arg); }

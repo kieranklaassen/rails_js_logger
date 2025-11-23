@@ -4,8 +4,6 @@ require "logger"
 require_relative "rails_js_logger/version"
 
 module RailsJsLogger
-  class Error < StandardError; end
-
   class << self
     attr_accessor :enabled, :log_level, :tag, :sample_rate, :max_payload_size
     attr_writer :logger

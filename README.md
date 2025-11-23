@@ -1,43 +1,67 @@
-# Rails::Js::Logger
+# Rails JS Logger
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rails/js/logger`. To experiment with that code, run `bin/console` for an interactive prompt.
+Bridge JavaScript console output to Rails logs for unified debugging.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add to your Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
-
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+gem "rails_js_logger"
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+Run the installer:
 
-```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```sh
+rails generate rails_js_logger:install
+```
+
+Mount the engine in `config/routes.rb`:
+
+```ruby
+mount RailsJsLogger::Engine, at: "/rails_js_logger"
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+JavaScript console methods are automatically forwarded to Rails logs:
 
-## Development
+```javascript
+console.log("User clicked checkout", { cart_id: 123 });
+console.error("Payment failed", error);
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Appears in Rails logs as:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```
+[JS] User clicked checkout {"cart_id":123}
+[JS] Payment failed TypeError: Cannot read property...
+```
 
-## Contributing
+Uncaught errors and unhandled promise rejections are also captured.
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rails-js-logger. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/rails-js-logger/blob/main/CODE_OF_CONDUCT.md).
+## Configuration
+
+```ruby
+# config/initializers/rails_js_logger.rb
+RailsJsLogger.enabled = true
+RailsJsLogger.log_level = :debug        # :debug, :info, :warn, :error
+RailsJsLogger.tag = "JS"
+RailsJsLogger.sample_rate = 1.0         # 0.0 to 1.0
+RailsJsLogger.max_payload_size = 100_000
+RailsJsLogger.logger = Rails.logger
+```
+
+## JavaScript Options
+
+```javascript
+window.RailsJsLogger.init({
+  endpoint: "/rails_js_logger/logs",
+  batchSize: 10,
+  flushInterval: 5000
+});
+```
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Rails::Js::Logger project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/rails-js-logger/blob/main/CODE_OF_CONDUCT.md).
+MIT

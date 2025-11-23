@@ -1,0 +1,22 @@
+Description:
+    Installs RailsJsLogger to forward JavaScript console output to Rails logs.
+
+Example:
+    rails generate rails_js_logger:install
+
+    This will create:
+        config/initializers/rails_js_logger.rb
+
+    And modify:
+        config/routes.rb (mounts the engine)
+        config/importmap.rb (if using importmap-rails)
+        app/javascript/application.js (if using importmap-rails)
+
+Configuration:
+    After installation, customize config/initializers/rails_js_logger.rb:
+
+        RailsJsLogger.enabled = true
+        RailsJsLogger.log_level = :debug
+        RailsJsLogger.tag = "JS"
+        RailsJsLogger.sample_rate = 1.0
+        RailsJsLogger.max_payload_size = 100_000

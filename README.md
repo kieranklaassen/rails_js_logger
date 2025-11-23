@@ -16,11 +16,10 @@ Run the installer:
 rails generate rails_js_logger:install
 ```
 
-Mount the engine in `config/routes.rb`:
-
-```ruby
-mount RailsJsLogger::Engine, at: "/rails_js_logger"
-```
+The installer automatically:
+- Creates `config/initializers/rails_js_logger.rb`
+- Mounts the engine in `config/routes.rb`
+- Adds JavaScript to importmap (if using importmap-rails)
 
 ## Usage
 

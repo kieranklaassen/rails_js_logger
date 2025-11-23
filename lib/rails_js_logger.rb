@@ -17,7 +17,7 @@ module RailsJsLogger
     private
 
     def default_logger
-      defined?(Rails) ? Rails.logger : Logger.new($stdout)
+      (defined?(Rails) && Rails.respond_to?(:logger) && Rails.logger) || Logger.new($stdout)
     end
   end
 

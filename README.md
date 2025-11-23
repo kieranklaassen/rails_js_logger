@@ -2,6 +2,14 @@
 
 Bridge JavaScript console output to Rails logs for unified debugging.
 
+## Why?
+
+*LLM-friendly debugging.* AI coding assistants like Claude Code can read your Rails server logs but cannot access browser developer tools. When JavaScript errors occur, your AI assistant sees nothing—the errors are trapped in the browser console. This gem bridges that gap by forwarding all `console.log`, `console.error`, and uncaught exceptions to your Rails logs where AI assistants can read and help debug them.
+
+*Unified logging.* Stop switching between browser console and server logs. See JavaScript errors alongside your Rails logs in one place.
+
+*Zero frontend dependencies.* Works with any JavaScript setup—importmaps, esbuild, webpack, or plain script tags. No npm packages required.
+
 ## Installation
 
 Add to your Gemfile:
